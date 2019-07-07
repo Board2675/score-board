@@ -44,7 +44,7 @@ export default {
         .auth()
         .signInWithPopup(provider)
         .then(() => {
-          this.$router.replace("home");
+          this.$router.replace("settings");
         })
         // eslint-disable-next-line
         .catch(err => {

@@ -1,7 +1,7 @@
 <template>
-<div id="card"> 
-	<p>{{ name }}</p>
-	<p>{{ points }}</p>
+<div id="field"> 
+	<p>{{ label }}</p>
+	<p>{{ data }}</p>
 </div>
 </template>
 
@@ -10,8 +10,8 @@
 export default {
   name: "HelloWorld",
   props: {
-		name: String,
-		points: String
+		label: String,
+		data: String
   }
 };
 </script>
@@ -26,7 +26,7 @@ h1, h2, h3, h4, h5, h6, p, a, div, button {
 #card {
 	padding: 32px;
 	border-radius: 8px;
-	background-color: rgba(244, 244, 252, 0.8);
+	background-color: #F4F4FC;
 	box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 	display: inline-block;
 }
