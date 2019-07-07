@@ -1,18 +1,64 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="home">
+    <div class="top-bar">
+      <button class="signin-button" @click="socialLogin">Sign in with GitHub</button>
+    </div>
+    <div class="heading">
+      <img class="score-board-logo" alt="logo" src="../assets/score-board-logo.png" />
+      <h2>🏆</h2>
+      <h2>Welcome to Score Board!</h2>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import firebase from "firebase";
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
+  name: "home",
+  methods: {
+    socialLogin() {
+      const provider = new firebase.auth.GithubAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(() => {
+          this.$router.replace("home");
+        })
+        .catch(err => {
+          alert("Failed to sign in with GitHub :(");
+        });
+    }
   }
-}
+};
 </script>
+
+
+<style scoped>
+#home {
+  padding: 24px;
+}
+
+.top-bar {
+  padding: 0px 32px;
+}
+
+.heading {
+  padding: 64px 32px;
+}
+
+.score-board-logo {
+  padding: 48px;
+  width: 64px;
+}
+
+.signin-button {
+  background-color: rgba(244, 244, 252, 0.2);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  float: right;
+  cursor: pointer;
+}
+</style>
