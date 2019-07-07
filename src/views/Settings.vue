@@ -1,64 +1,74 @@
 <template>
   <div class="settings">
     <h3>General Settings</h3>
+
+    <transition name="fade">
+      <p v-if="showSuccess" class="success">profile updated</p>
+    </transition>
+
+    <form @submit.prevent>
       <div class="name-feild field">
         <div class="label">Name:</div>
-        <input class="input" :value="user.name" type="text" ref="nameField"/>
+        <input
+          id="name"
+          class="input"
+          :placeholder="userProfile.name"
+          type="text"
+          v-model.trim="name"
+        />
       </div>
-      <button class="save-button" @click="changeName">Save Changes</button>
+      <button @click="updateName" class="save-button">Save Changes</button>
+    </form>
 
     <h3>Connected Accounts</h3>
+    <div v-for="(username, account) in userProfile.accounts" :key="account">
+      <div class="name-feild field">
+        <div class="label">{{ account }}:</div>
+        <input id="name" class="input" :placeholder="username" type="text" :v-model="account" />
+      </div>
+    </div>
+    <button @click="updateName" class="save-button">Save Changes</button>
   </div>
 </template>
 
 <script>
-import firebase from "firebase";
-import { db } from "../main";
-
+import { mapState } from "vuex";
 export default {
-  name: "settings",
   data() {
     return {
-      user: [],
+      name: "",
+      // title: '',
+      showSuccess: false
     };
   },
-  firestore() {
-      const uid = firebase.auth().currentUser.uid;
-      return {
-        user: db.collection("users").doc(uid)
-      };
+  computed: {
+    ...mapState(["userProfile"])
   },
   methods: {
-    changeName() {
-      const uid = firebase.auth().currentUser.uid;
-      db.collection('users').doc(uid).set ({name: this.$refs.nameField.value}, {merge: true});
-    alert("Your name has been changed!");
+    updateName() {
+      this.$store.dispatch("updateName", {
+        name: this.name !== "" ? this.name : this.userProfile.name
+      });
+      this.name = "";
+      this.showSuccess = true;
+      setTimeout(() => {
+        this.showSuccess = false;
+      }, 2000);
     }
   }
 };
 </script>
 
 <style>
-.field {
-  width: 60%;
-  margin: 0 auto;
-  padding: 18px;
-  border-radius: 8px;
-	background-color: rgba(244, 244, 252, 0.8);
-	box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-  color: #000000d0;
-}
-
 .field .input {
   border-radius: 8px;
-	/* box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   border: none;
   padding: 8px;
   margin: 8px;
 }
 
 .field * {
-  color: #000000d0;
   display: inline-block;
 }
 

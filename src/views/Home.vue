@@ -18,8 +18,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import firebase from "firebase";
-import { db } from "../main";
 import Card from "@/components/Card.vue";
 
 export default {
@@ -27,15 +27,11 @@ export default {
   components: {
     Card
   },
-  data() {
-    return {
-      scoreboard: []
-    };
+  computed: {
+    ...mapState(["scoreboard"])
   },
-  firestore() {
-    return {
-      scoreboard: db.collection("dashboard").doc("scoreboard")
-    };
+  created: function() {
+    this.$store.dispatch("fetchScoreBoard");
   },
   methods: {
     socialLogin() {
@@ -43,12 +39,14 @@ export default {
       firebase
         .auth()
         .signInWithPopup(provider)
-        .then(() => {
+        .then(user => {
+          this.$store.commit("setCurrentUser", user);
+          this.$store.dispatch("fetchUserProfile");
           this.$router.replace("settings");
         })
         // eslint-disable-next-line
         .catch(err => {
-          alert("Failed to sign in with GitHub :(");
+          alert("Failed to sign in with GitHub :(" + err);
         });
     }
   }
