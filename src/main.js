@@ -2,9 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import firebase from 'firebase'
+import VueFirestore from 'vue-firestore';
 
 Vue.config.productionTip = false
 
+Vue.use(VueFirestore);
 const firebaseConfig = {
   apiKey: "AIzaSyAbLNj-ETH36VL-J8jOAG50DBAjWLtZjn8",
   authDomain: "score-board-c86a7.firebaseapp.com",
@@ -16,6 +18,8 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+export const db = firebase.firestore();
 
 new Vue({
   router,

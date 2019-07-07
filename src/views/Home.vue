@@ -8,14 +8,35 @@
       <h2>🏆</h2>
       <h2>Welcome to Score Board!</h2>
     </div>
+
+    <div class="cards">
+      <div class="card" v-for="(profile, idx) in scoreboard.profiles" :key="idx">
+        <Card :name="profile.name" :points="profile.points" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
+import { db } from "../main";
+import Card from "@/components/Card.vue";
 
 export default {
   name: "home",
+  components: {
+    Card
+  },
+  data() {
+    return {
+      scoreboard: []
+    };
+  },
+  firestore() {
+    return {
+      scoreboard: db.collection("dashboard").doc("scoreboard")
+    };
+  },
   methods: {
     socialLogin() {
       const provider = new firebase.auth.GithubAuthProvider();
@@ -25,6 +46,7 @@ export default {
         .then(() => {
           this.$router.replace("home");
         })
+        // eslint-disable-next-line
         .catch(err => {
           alert("Failed to sign in with GitHub :(");
         });
@@ -37,6 +59,11 @@ export default {
 <style scoped>
 #home {
   padding: 24px;
+}
+
+.card {
+  display: inline-block;
+  padding: 16px;
 }
 
 .top-bar {
