@@ -90,22 +90,14 @@ export const store = new Vuex.Store({
 			// let title = data.title
 
 			fb.usersCollection.doc(state.currentUser.uid).update({ name }).then(user => {
-				// update all posts by user to reflect new name
-				// fb.postsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-				// 	docs.forEach(doc => {
-				// 		fb.postsCollection.doc(doc.id).update({
-				// 			userName: name
-				// 		})
-				// 	})
-				// })
-				// update all comments by user to reflect new name
-				// fb.commentsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-				// 	docs.forEach(doc => {
-				// 		fb.commentsCollection.doc(doc.id).update({
-				// 			userName: name
-				// 		})
-				// 	})
-				// })
+			}).catch(err => {
+				console.log(err)
+			})
+		},
+		updateAccounts({ commit, state }, data) {
+			let accounts = data.accounts
+			console.log(accounts)
+			fb.usersCollection.doc(state.currentUser.uid).update({ accounts }).then(user => {
 
 			}).catch(err => {
 				console.log(err)

@@ -1,10 +1,9 @@
 <template>
   <div class="settings">
-    <h3>General Settings</h3>
-
     <transition name="fade">
       <p v-if="showSuccess" class="success">profile updated</p>
     </transition>
+    <h3>General Settings</h3>
 
     <form @submit.prevent>
       <div class="name-feild field">
@@ -14,7 +13,7 @@
           class="input"
           :placeholder="userProfile.name"
           type="text"
-          v-model.trim="name"
+          :value="userProfile.name"
         />
       </div>
       <button @click="updateName" class="save-button">Save Changes</button>
@@ -24,10 +23,10 @@
     <div v-for="(username, account) in userProfile.accounts" :key="account">
       <div class="name-feild field">
         <div class="label">{{ account }}:</div>
-        <input id="name" class="input" :placeholder="username" type="text" :v-model="account" />
+        <input :id="account" class="input" :placeholder="username" type="text" :value="account" />
       </div>
     </div>
-    <button @click="updateName" class="save-button">Save Changes</button>
+    <button @click="updateAccounts" class="save-button">Save Changes</button>
   </div>
 </template>
 
@@ -46,10 +45,25 @@ export default {
   },
   methods: {
     updateName() {
+      var name = document.getElementById("name").value;
       this.$store.dispatch("updateName", {
-        name: this.name !== "" ? this.name : this.userProfile.name
+        name: name !== "" ? name : this.userProfile.name
       });
       this.name = "";
+      this.showSuccess = true;
+      setTimeout(() => {
+        this.showSuccess = false;
+      }, 2000);
+    },
+    updateAccounts() {
+      var accounts = {};
+      for (var a in this.userProfile.accounts) {
+        accounts[a] = document.getElementById(a).value;
+      }
+      console.log(accounts);
+      this.$store.dispatch("updateAccounts", {
+        accounts: accounts
+      });
       this.showSuccess = true;
       setTimeout(() => {
         this.showSuccess = false;
